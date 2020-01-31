@@ -38,7 +38,7 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
      * 显示 Toast 提示
      */
     override fun showToast(message: String?) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
 }

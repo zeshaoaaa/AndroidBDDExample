@@ -54,7 +54,7 @@ dependencies {
 
     // 模拟框架
     testImplementation "io.mockk:mockk:1.9.3"
-    androidTestImplementation('io.mockk:mockk-android:1.9.3') { exclude module: 'objenesis' }
+    androidTestImplementation('io.mockk:mockk-android:1.9.2') { exclude module: 'objenesis' }
     androidTestImplementation 'org.objenesis:objenesis:2.6'
 
     androidTestImplementation 'androidx.test:rules:1.1.0'

@@ -3,7 +3,7 @@ package org.jay.example
 import android.app.Application
 import android.util.Log
 import org.jay.example.login.LoginContract
-import org.jay.example.login.LoginModel
+import org.jay.example.data.LoginModel
 import org.jay.example.login.LoginPresenter
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin

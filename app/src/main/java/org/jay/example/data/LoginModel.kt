@@ -1,7 +1,7 @@
-package org.jay.example.login
+package org.jay.example.data
 
 import io.reactivex.Observable
-import org.jay.example.data.BaseResponse
+import org.jay.example.login.LoginContract
 
 const val RESPONSE_CODE_SUCCESS = 200
 
@@ -13,9 +13,10 @@ class LoginModel : LoginContract.Model {
     /**
      * 请求登录
      */
-    override fun requestLogin(phone: String, password: String) : Observable<BaseResponse<String>> {
+    override fun requestLogin(phone: String, password: String)
+            : Observable<BaseResponse<String>> {
         return Observable.create {
-            // 别看了，没有服务器，不请求
+            // 服务器没做好，啥也没有
         }
     }
 
