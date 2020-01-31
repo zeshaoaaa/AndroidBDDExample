@@ -20,6 +20,7 @@ class LoginContract {
     abstract class Presenter {
 
         abstract fun onLogin(phone: String, password: String)
+
     }
 
 }

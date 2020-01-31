@@ -13,7 +13,7 @@ android {
         versionCode 1
         versionName "1.0"
         // 这个项目只有 Cucumber 测试，不用动态替换
-        testInstrumentationRunner 'org.jay.example.CucumberTestRunner'
+        testInstrumentationRunner 'org.jay.example.runner.CucumberTestRunner'
         // testInstrumentationRunner getInstrumentation(project)
     }
     buildTypes {
@@ -28,10 +28,10 @@ android {
 }
 
 /**
- * 获取 Instrumentation 测试运行器
+ * 根据运行任务时的参数，动态获取 Instrumentation 测试运行器
  */
 def getInstrumentation(Project project) {
-    project.hasProperty('cucumber') ? 'org.jay.example.CucumberTestRunner' :
+    project.hasProperty('cucumber') ? 'org.jay.example.runner.CucumberTestRunner' :
             'androidx.test.runner.AndroidJUnitRunner'
 }
 
@@ -46,18 +46,23 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
 
     // 依赖注入框架
-    implementation "org.koin:koin-androidx-scope:2.0.1"
+    implementation "org.koin:koin-android:2.0.1"
 
     // ------------------------- 测试框架 start-------------------------
 
     testImplementation 'junit:junit:4.12'
 
-    // Mock 框架
+    // 模拟框架
     testImplementation "io.mockk:mockk:1.9.3"
+    androidTestImplementation('io.mockk:mockk-android:1.9.3') { exclude module: 'objenesis' }
+    androidTestImplementation 'org.objenesis:objenesis:2.6'
 
     androidTestImplementation 'androidx.test:rules:1.1.0'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+    // Koin 测试
+    androidTestImplementation "org.koin:koin-test:2.0.1"
 
     // Android BDD 框架
     androidTestImplementation 'io.cucumber:cucumber-android:4.3.1'
@@ -65,6 +70,5 @@ dependencies {
 
     // ------------------------- 测试框架 end-------------------------
 
-
-
 }
+

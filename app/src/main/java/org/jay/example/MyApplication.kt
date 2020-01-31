@@ -1,6 +1,7 @@
 package org.jay.example
 
 import android.app.Application
+import android.util.Log
 import org.jay.example.login.LoginContract
 import org.jay.example.login.LoginModel
 import org.jay.example.login.LoginPresenter
@@ -33,6 +34,7 @@ class MyApplication : Application() {
      * 启动 Koin 容器
      */
     private fun startKoin() {
+        Log.e("MyApplication", "startKoin")
         // 启动 Koin
         startKoin {
             androidContext(this@MyApplication)

@@ -6,8 +6,11 @@ public class Foo {
         if (text == null) {
             return null;
         }
+        if (!text.contains(",")) {
+            return null;
+        }
         int index = text.indexOf(",");
-        String substring = text.substring(index);
+        String substring = text.substring(index + 1);
         return substring;
 
     }
