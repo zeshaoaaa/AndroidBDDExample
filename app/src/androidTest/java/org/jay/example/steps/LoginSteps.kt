@@ -24,6 +24,7 @@ import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.not
 import org.jay.example.R
 import org.jay.example.data.BaseResponse
+import org.jay.example.data.RESPONSE_CODE_SUCCESS
 import org.jay.example.login.LoginActivity
 import org.jay.example.login.LoginContract
 import org.koin.core.context.loadKoinModules
@@ -76,7 +77,7 @@ class LoginSteps {
             model.requestLogin(any(), any())
         } returns Observable.create {
             val result = BaseResponse<String>()
-            result.message = "登陆成功"
+            result.code = RESPONSE_CODE_SUCCESS
             it.onNext(result)
         }
     }
