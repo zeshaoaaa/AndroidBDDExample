@@ -1,0 +1,22 @@
+
+android.buildTypes {
+    debug {
+        buildConfigField 'String', 'TEST_TAGS', '"' + getTestTags() + '"'
+        buildConfigField 'String', 'TEST_SCENARIO', '"' + getTestScenario() + '"'
+    }
+}
+
+/**
+ * 获取需要运行的测试的标签类型
+ */
+def getTestTags() {
+    project.getProperties().get('tags') ?: ''
+}
+
+/**
+ * 获取需要测试的场景
+ */
+def getTestScenario() {
+    project.getProperties().get('scenario') ?: ''
+}
+
