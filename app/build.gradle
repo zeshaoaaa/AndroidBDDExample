@@ -12,7 +12,9 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner getInstrumentation(project)
+        // 这个项目只有 Cucumber 测试，不用动态替换
+        testInstrumentationRunner 'org.jay.example.CucumberTestRunner'
+        // testInstrumentationRunner getInstrumentation(project)
     }
     buildTypes {
 

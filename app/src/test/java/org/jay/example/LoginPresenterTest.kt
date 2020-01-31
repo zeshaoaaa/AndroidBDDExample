@@ -68,7 +68,7 @@ class LoginPresenterTest {
     fun testOnLoginFailedByIllegalPhone() {
         val phone = "666"
         val password = "123456"
-        testOnLogin(phone, password, "输入的手机号有误，请重新确认")
+        testOnLogin(phone, password, "手机号有误，请重新确认")
     }
 
     /**
