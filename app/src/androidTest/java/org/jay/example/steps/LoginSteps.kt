@@ -1,14 +1,6 @@
 package org.jay.example.steps
 
 import android.util.Log
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.typeText
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.RootMatchers.withDecorView
-import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.rule.ActivityTestRule
 import cucumber.api.Scenario
 import cucumber.api.java.After
@@ -20,19 +12,24 @@ import cucumber.api.java.en.When
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Observable
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.not
 import org.jay.example.R
 import org.jay.example.data.BaseResponse
 import org.jay.example.data.RESPONSE_CODE_SUCCESS
 import org.jay.example.login.LoginActivity
 import org.jay.example.login.LoginContract
+import org.jay.example.utils.click
+import org.jay.example.utils.typeText
+import org.jay.example.utils.withToast
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
 
-const val SCENARIO_NAME_LOGIN_SUCCESSFUL = "登录成功"
 /**
- * 登录页测试的各个步骤
+ * 场景名称：登陆成功
+ */
+const val SCENARIO_NAME_LOGIN_SUCCESSFUL = "登录成功"
+
+/**
+ * 登录特性的步骤定义
  */
 class LoginSteps {
 
@@ -65,7 +62,6 @@ class LoginSteps {
             }
         }
         mockRequestLogin(model)
-        println("hooks---loadMockModules")
         loadKoinModules(module)
     }
 
@@ -84,37 +80,32 @@ class LoginSteps {
 
     @Given("用户进入了登录页")
     fun `用户进入了登录页`() {
-        println("用户进入了登录页666")
         rule.launchActivity(null)
     }
 
     @When("用户输入了手机号 (\\S+)$")
     fun `用户输入了手机号`(phone: String) {
-        onView(withId(R.id.edPhone)).perform(typeText(phone))
+        R.id.edPhone.typeText(phone)
     }
 
     @And("用户输入了密码 (\\S+)$")
     fun `用户输入了密码`(password: String) {
-        onView(withId(R.id.edPassword)).perform(typeText(password))
+        R.id.edPassword.typeText(password)
     }
 
     @And("用户点击了登录按钮")
     fun `用户点击了登录按钮`() {
-        onView(withId(R.id.btnLogin)).perform(click())
+        R.id.btnLogin.click()
     }
 
     @Then("用户能看到“登录成功”的提示")
     fun `用户能看到“登录成功”的提示`() {
-        onView(withText("登陆成功"))
-            .inRoot(withDecorView(not(`is`(rule.activity.window.decorView))))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        "登录成功".withToast(rule)
     }
 
     @Then("用户能看到“手机号有误，请重新确认”的提示")
     fun `用户能看到“手机号有误，请重新确认”的提示`() {
-        onView(withText("手机号有误，请重新确认"))
-            .inRoot(withDecorView(not(`is`(rule.activity.window.decorView))))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        "手机号有误，请重新确认".withToast(rule)
     }
 
     /**

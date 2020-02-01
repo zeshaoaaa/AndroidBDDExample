@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply from: '../cucumber.gradle'
+apply from: '../jacoco.gradle'
 
 android {
     compileSdkVersion 29
@@ -53,7 +54,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     // 模拟框架
-    testImplementation "io.mockk:mockk:1.9.3"
+    testImplementation "io.mockk:mockk:1.9.2"
     androidTestImplementation('io.mockk:mockk-android:1.9.2') { exclude module: 'objenesis' }
     androidTestImplementation 'org.objenesis:objenesis:2.6'
 
