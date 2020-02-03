@@ -5,7 +5,7 @@ buildscript {
     ext.jacoco_version = '0.8.4'
     ext.android_junit5_version = '1.5.2.0'
     ext.spek_version = '2.0.9'
-    ext.mockk_version = '1.9.2'
+    ext.mockk_version = '1.9.3'
     ext.koin_version = '2.0.1'
     ext.cucumber_version = '4.3.1'
     ext.gradle_version = '3.5.3'

@@ -26,7 +26,7 @@ import org.koin.dsl.module
 /**
  * 场景名称：登陆成功
  */
-const val SCENARIO_NAME_LOGIN_SUCCESSFUL = "登录成功"
+const val SCENARIO_NAME_LOGIN_WITH_VALID_ACCOUNT = "使用合法账户信息登录"
 
 /**
  * 登录特性的步骤定义
@@ -43,20 +43,20 @@ class LoginSteps {
      */
     @Before
     fun setUp(scenario: Scenario) {
-        Log.e("hooks", "before---scenario: " + scenario.name)
+        Log.e("LoginSteps", "before---scenario: " + scenario.name)
         // 场景登录成功，需要请求登录接口
-        if (scenario.name == SCENARIO_NAME_LOGIN_SUCCESSFUL) {
+        if (scenario.name == SCENARIO_NAME_LOGIN_WITH_VALID_ACCOUNT) {
             loadMockModules()
         }
     }
 
     /**
-     * 使用模拟模块替换真实模块
+     * 替换 Koin 容器中的模块
      */
     private fun loadMockModules() {
         val model = mockk<LoginContract.Model>()
         val module = module {
-            // 业务逻辑层
+            // 使用模拟数据层替换真实数据层
             factory(override = true) {
                 model
             }
@@ -69,6 +69,7 @@ class LoginSteps {
      * 模拟登陆请求
      */
     private fun mockRequestLogin(model: LoginContract.Model) {
+        Log.e("LoginSteps", "mockRequestLogin")
         every {
             model.requestLogin(any(), any())
         } returns Observable.create {
@@ -92,6 +93,13 @@ class LoginSteps {
     fun `用户输入了密码`(password: String) {
         R.id.edPassword.typeText(password)
     }
+
+    @When("用户输入了手机号2 \\(15200000000)")
+    fun `用户输入了手机号2`(phone: String) {
+        Log.e("LoginSteps", "用户输入了手机号2---phone: $phone")
+        R.id.edPhone.typeText(phone)
+    }
+
 
     @And("用户点击了登录按钮")
     fun `用户点击了登录按钮`() {
