@@ -26,7 +26,7 @@ import org.koin.dsl.module
 /**
  * 场景名称：登陆成功
  */
-const val SCENARIO_NAME_LOGIN_WITH_VALID_ACCOUNT = "使用合法账户信息登录"
+const val SCENARIO_NAME_LOGIN_WITH_ACCOUNT_INFO = "账户信息验证"
 
 /**
  * 登录特性的步骤定义
@@ -45,7 +45,7 @@ class LoginSteps {
     fun setUp(scenario: Scenario) {
         Log.e("LoginSteps", "before---scenario: " + scenario.name)
         // 场景登录成功，需要请求登录接口
-        if (scenario.name == SCENARIO_NAME_LOGIN_WITH_VALID_ACCOUNT) {
+        if (scenario.name == SCENARIO_NAME_LOGIN_WITH_ACCOUNT_INFO) {
             loadMockModules()
         }
     }
