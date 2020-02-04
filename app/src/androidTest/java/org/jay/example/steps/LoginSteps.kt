@@ -94,26 +94,14 @@ class LoginSteps {
         R.id.edPassword.typeText(password)
     }
 
-    @When("用户输入了手机号2 \\(15200000000)")
-    fun `用户输入了手机号2`(phone: String) {
-        Log.e("LoginSteps", "用户输入了手机号2---phone: $phone")
-        R.id.edPhone.typeText(phone)
-    }
-
-
     @And("用户点击了登录按钮")
     fun `用户点击了登录按钮`() {
         R.id.btnLogin.click()
     }
 
-    @Then("用户能看到“登录成功”的提示")
-    fun `用户能看到“登录成功”的提示`() {
-        "登录成功".withToast(rule)
-    }
-
-    @Then("用户能看到“手机号有误，请重新确认”的提示")
-    fun `用户能看到“手机号有误，请重新确认”的提示`() {
-        "手机号有误，请重新确认".withToast(rule)
+    @Then("用户能看到提示 (\\S+)\$")
+    fun `用户能看到xxx的提示`(message: String) {
+        message.withToast(rule)
     }
 
     /**

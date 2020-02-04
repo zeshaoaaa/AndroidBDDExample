@@ -5,7 +5,8 @@ import cucumber.api.CucumberOptions
 @CucumberOptions(
     features = ["features"],
     glue = ["org.jay.example.steps"],
-    tags = ["@e2e", "@smoke"]
+    tags = ["@e2e", "@smoke"],
+    strict = true
 )
 class CucumberTestCase
 
