@@ -6,7 +6,7 @@ import org.jay.example.login.LoginContract
 const val RESPONSE_CODE_SUCCESS = 200
 
 /**
- * 登陆页的数据层
+ * 登录页的数据层
  */
 class LoginModel : LoginContract.Model {
 

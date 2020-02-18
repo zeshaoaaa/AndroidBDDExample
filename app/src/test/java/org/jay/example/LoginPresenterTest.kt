@@ -1,5 +1,6 @@
 package org.jay.example
 
+import android.util.Log
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -42,14 +43,14 @@ class LoginPresenterTest {
     }
 
     /**
-     * 模拟登陆请求
+     * 模拟登录请求
      */
     private fun mockRequestLogin() {
         every {
             model.requestLogin(any(), any())
         } returns Observable.create {
             val result = BaseResponse<String>()
-            result.message = "登陆成功"
+            result.message = "登录成功"
             it.onNext(result)
         }
     }
@@ -61,7 +62,7 @@ class LoginPresenterTest {
     fun testOnLoginSuccess() {
         val phone = "15212345678"
         val password = "123456"
-        testOnLogin(phone, password, "登陆成功")
+        testOnLogin(phone, password, "登录成功")
     }
 
     /**
@@ -70,7 +71,7 @@ class LoginPresenterTest {
     @Test
     fun testOnLoginFailedByIllegalPhone() {
         val phone = "666"
-        val password = "123456"
+        val password = "000000"
         testOnLogin(phone, password, "手机号有误，请重新确认")
     }
 
@@ -83,7 +84,6 @@ class LoginPresenterTest {
             view.showToast(message)
         }
     }
-
 
     /**
      * 测试手机号验证方法

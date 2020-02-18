@@ -24,7 +24,7 @@ import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
 
 /**
- * 场景名称：登陆成功
+ * 场景名称：登录成功
  */
 const val SCENARIO_NAME_LOGIN_WITH_ACCOUNT_INFO = "账户信息验证"
 
@@ -66,7 +66,7 @@ class LoginSteps {
     }
 
     /**
-     * 模拟登陆请求
+     * 模拟登录请求
      */
     private fun mockRequestLogin(model: LoginContract.Model) {
         Log.e("LoginSteps", "mockRequestLogin")
@@ -74,11 +74,10 @@ class LoginSteps {
             model.requestLogin(any(), any())
         } returns Observable.create {
             val result = BaseResponse<String>()
-            result.code = RESPONSE_CODE_SUCCESS
+            result.message = "登录成功"
             it.onNext(result)
         }
     }
-
     @Given("用户进入了登录页")
     fun `用户进入了登录页`() {
         rule.launchActivity(null)

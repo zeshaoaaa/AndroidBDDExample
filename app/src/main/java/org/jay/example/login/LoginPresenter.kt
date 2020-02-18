@@ -1,5 +1,6 @@
 package org.jay.example.login
 
+import android.util.Log
 import androidx.annotation.VisibleForTesting
 import org.jay.example.data.RESPONSE_CODE_SUCCESS
 
@@ -30,11 +31,7 @@ class LoginPresenter(
 
         // 这里没有使用 Observer 处理异常，请勿模仿
         model.requestLogin(phone, password).subscribe {
-            if (it.code == RESPONSE_CODE_SUCCESS) {
-                view.showToast("登录成功")
-            } else {
-                view.showToast(it.message)
-            }
+            view.showToast(it.message)
         }
 
     }

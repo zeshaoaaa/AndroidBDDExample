@@ -38,8 +38,6 @@ open class CucumberTestRunner : CucumberAndroidJUnitRunner() {
 
         super.onCreate(arguments)
 
-
-
     }
 
     override fun onStart() {
