@@ -11,20 +11,22 @@ apply from: '../jacoco.gradle'
 // Spec 配置
 apply from: '../spek.gradle'
 
+// Spoon 配置
+apply from: '../spoon.gradle'
 
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.0"
+
     defaultConfig {
         applicationId "org.jay.example"
+        testInstrumentationRunner 'org.jay.example.test.CucumberTestRunner'  // 验收测试运行器
         minSdkVersion 15
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-        // 这个项目只有 Cucumber 测试，不用动态替换
-        testInstrumentationRunner 'org.jay.example.runner.CucumberTestRunner'
-        // testInstrumentationRunner getInstrumentation(project)
     }
+
     buildTypes {
 
         release {
@@ -33,15 +35,13 @@ android {
         }
     }
 
+    // 源码集
+    sourceSets {
+        androidTest {
+            assets.srcDirs = ['src/androidTest/assets']
+        }
+    }
 
-}
-
-/**
- * 根据运行任务时的参数，动态获取 Instrumentation 测试运行器
- */
-def getInstrumentation(Project project) {
-    project.hasProperty('cucumber') ? 'org.jay.example.runner.CucumberTestRunner' :
-            'androidx.test.runner.AndroidJUnitRunner'
 }
 
 dependencies {
@@ -79,8 +79,6 @@ dependencies {
     // Android BDD 框架
     androidTestImplementation "io.cucumber:cucumber-android:$cucumber_version"
     androidTestImplementation "io.cucumber:cucumber-picocontainer:$cucumber_version"
-
-
 
     // ------------------------- 测试框架 end-------------------------
 

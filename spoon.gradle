@@ -1,0 +1,82 @@
+// Spoon 插件
+apply plugin: "com.jaredsburrows.spoon"
+
+// Spoon 配置
+spoon {
+    debug = true
+    //this is faster but can be set to false
+    singleInstrumentationCall = true
+    grantAll = true
+    shard = true
+}
+
+/*
+spoon {
+    // 本次执行的测试的标题 (默认为 "Spoon Execution")
+    title = "My tests"
+
+    // 输出文件的路径(默认为 "$buildDir/spoon-output")
+    baseOutputDir = "spoonTests"
+
+    // 是否开启调试模式，默认为 false
+    debug = true
+
+    // 是否关闭动画，默认为 false
+    noAnimations = true
+
+    // adb 超时时间，默认为 10 分钟
+    adbTimeout = 5
+
+    // 要执行测试的设备序列
+    devices = ["emulator-5554", "emulator-5556"]
+
+    // 添加跳过测试的设备序列
+    // Add device serials for skipping test execution.
+    skipDevices = ["emulator-5555"]
+
+    // 传递给 Instrumentation 的额外参数
+    instrumentationArgs = ["listener:com.foo.Listener,com.foo.Listener2", "classLoader:com.foo.CustomClassLoader"]
+
+    // 要运行的测试类
+    // Test class name to run (fully-qualified).
+    className = "com.android.foo.FooClassName"
+
+    // 运行注解了的测试，可选参数：small、medium、large
+    testSize = "large"
+
+    // 允许无设备链接的情况下
+    // Allow no devices to be connected. (false by default)
+    allowNoDevices = true
+
+    // 一个设备一个设备地执行测试，默认为 false
+    // Execute the tests device by device. (false by default)
+    sequential = true
+
+    // 在 Android 6.0 及以上版本的设备中，在安装期间允许所有的运行时权限，默认为 false
+    grantAll = true
+
+    // Test method name to run (must also use className)
+    methodName = "testMethodName"
+
+    // Code coverage flag. For Spoon to calculate coverage file your app must have the `WRITE_EXTERNAL_STORAGE` permission. (false by default)
+    codeCoverage = true
+
+    // Toggle sharding. (false by default)
+    shard = true
+
+    // The number of separate shards to create.
+    numShards = 10
+
+    // The shardIndex option to specify which shard to run.
+    shardIndex = 2
+
+    // 运行测试
+    // Run tests in separate instrumentation calls.
+    singleInstrumentationCall = true
+
+    // Do not fail build if a test fails, let all the tests run and finish. (false by default)
+    ignoreFailures = true
+
+    // Clear app data before each test. (false by default)
+    clearAppDataBeforeEachTest = true
+}*/

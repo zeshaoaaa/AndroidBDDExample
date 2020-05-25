@@ -1,5 +1,5 @@
 # language: zh-CN
-
+#noinspection CucumberTableInspection,NonAsciiCharacters,CucumberUndefinedStep
 功能: 登录
 
   作为一名用户
@@ -7,13 +7,12 @@
   以便可以查看我账户下的信息
 
   @smoke
-  @e2e
   场景大纲: 账户信息验证
-    假如 用户进入了登录页
-    当 用户输入了手机号 <phone>
-    并且 用户输入了密码 <password>
-    并且 用户点击了登录按钮
-    那么 用户能看到提示 <toast>
+    假如用户进入了登录页
+    当用户输入了手机号 <phone>
+    并且用户输入了密码 <password>
+    并且用户点击了登录按钮
+    那么用户能看到提示 <toast>
 
     例子: 合法账户信息
       | phone       | password | toast |

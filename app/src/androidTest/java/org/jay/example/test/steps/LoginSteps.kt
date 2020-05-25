@@ -1,6 +1,9 @@
-package org.jay.example.steps
+@file:Suppress("unused", "NonAsciiCharacters")
+
+package org.jay.example.test.steps
 
 import android.util.Log
+import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.rule.ActivityTestRule
 import cucumber.api.Scenario
 import cucumber.api.java.After
@@ -14,7 +17,6 @@ import io.mockk.mockk
 import io.reactivex.Observable
 import org.jay.example.R
 import org.jay.example.data.BaseResponse
-import org.jay.example.data.RESPONSE_CODE_SUCCESS
 import org.jay.example.login.LoginActivity
 import org.jay.example.login.LoginContract
 import org.jay.example.utils.click
@@ -31,6 +33,7 @@ const val SCENARIO_NAME_LOGIN_WITH_ACCOUNT_INFO = "账户信息验证"
 /**
  * 登录特性的步骤定义
  */
+@Suppress("RemoveRedundantBackticks")
 class LoginSteps {
 
     /**
@@ -95,6 +98,7 @@ class LoginSteps {
 
     @And("用户点击了登录按钮")
     fun `用户点击了登录按钮`() {
+        closeSoftKeyboard()
         R.id.btnLogin.click()
     }
 

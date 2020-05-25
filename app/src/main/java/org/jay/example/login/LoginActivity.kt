@@ -2,9 +2,10 @@ package org.jay.example.login
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
+import android.util.Log
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jay.example.R
+import org.jay.example.showToast
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 
@@ -23,6 +24,9 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
             login()
         }
 
+        val directory = getExternalFilesDir(null)
+        Log.e("", "directory: ${directory?.path}")
+
     }
 
     /**
@@ -38,7 +42,7 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
      * 显示 Toast 提示
      */
     override fun showToast(message: String?) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        message?.showToast()
     }
 
 }

@@ -13,6 +13,10 @@ buildscript {
     repositories {
         google()
         jcenter()
+
+        // Spoon 快照仓库
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' } 
+
     }
     
     dependencies {
@@ -24,6 +28,10 @@ buildscript {
 
         // JUnit5
         classpath "de.mannodermaus.gradle.plugins:android-junit5:$android_junit5_version"
+
+        // Spoon
+        classpath "com.jaredsburrows:gradle-spoon-plugin:1.5.0"
+
     }
 }
 

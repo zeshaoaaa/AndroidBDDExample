@@ -27,6 +27,7 @@ class MyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        application = this
         startKoin()
     }
 
@@ -41,6 +42,10 @@ class MyApplication : Application() {
             modules(loginModule)
         }
 
+    }
+
+    companion object {
+        lateinit var application: MyApplication
     }
 
 }

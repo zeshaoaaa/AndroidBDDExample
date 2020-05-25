@@ -1,22 +1,144 @@
 
-android.buildTypes {
-    debug {
-        buildConfigField 'String', 'TEST_TAGS', '"' + getTestTags() + '"'
-        buildConfigField 'String', 'TEST_SCENARIO', '"' + getTestScenario() + '"'
+
+android {
+
+    // 测试选项
+    testOptions {
+        // 取消动画
+        animationsDisabled true
+
+        unitTests.includeAndroidResources = true
+
+    }
+
+}
+
+// ==================================================================
+// 自定义任务
+// ==================================================================
+
+/**
+ * 运行 Instrumentation 测试
+ */
+task runInstrumentationTests {
+    group "verification"
+    mustRunAfter "deleteExistingCucumberReports"
+    dependsOn "deleteExistingCucumberReports","spoonDebugAndroidTest"
+    finalizedBy "downloadCucumberReports"
+}
+
+/*
+ * Downloads all Cucumber reports from the connected device.
+ */
+task downloadCucumberReports {
+    group "Verification"
+    description "Downloads the rich Cucumber report files (HTML, XML, JSON) from the connected device"
+
+    doLast {
+        def deviceSourcePath = getCucumberDevicePath()
+        println(deviceSourcePath)
+        def localReportPath = new File(buildDir, "reports/cucumber")
+        if (!localReportPath.exists()) {
+            localReportPath.mkdirs()
+        }
+        if (!localReportPath.exists()) {
+            throw new GradleException("Could not create $localReportPath")
+        }
+        def adb = getAdbPath()
+        def files = getCucumberReportFileNames()
+        files.each { fileName ->
+            def reportPath = "$deviceSourcePath/$fileName"
+            def reportFile = new File(reportPath)
+            println("fileName: ${reportPath}")
+            println("exists: ${reportFile.exists()}")
+            exec {
+                commandLine adb, 'pull', "$deviceSourcePath/$fileName", localReportPath
+            }
+        }
     }
 }
 
 /**
- * 获取需要运行的测试的标签类型
+ * Deletes existing Cucumber reports on the device.
  */
-def getTestTags() {
-    project.getProperties().get('tags') ?: ''
+task deleteExistingCucumberReports {
+    group "Verification"
+    description "Removes the rich Cucumber report files (HTML, XML, JSON) from the connected device"
+    doLast {
+        def deviceSourcePath = getCucumberDevicePath()
+        def files = getCucumberReportFileNames()
+        files.each { fileName ->
+            def deviceFileName = deviceSourcePath + '/' + fileName
+            def output2 = executeAdb('if [ -d "' + deviceFileName + '" ]; then rm -r "'
+                    + deviceFileName + '"; else rm -r "' + deviceFileName + '" ; fi')
+            println output2
+        }
+    }
 }
 
 /**
- * 获取需要测试的场景
+ * Sets the required permissions for Cucumber to write on the internal storage.
  */
-def getTestScenario() {
-    project.getProperties().get('scenario') ?: ''
+task grantPermissions(dependsOn: 'installDebug') {
+    doLast {
+        def adb = getAdbPath()
+        // We only set the permissions for the main application
+        def mainPackageName = android.defaultConfig.applicationId
+        def readPermission = "android.permission.READ_EXTERNAL_STORAGE"
+        def writePermission = "android.permission.WRITE_EXTERNAL_STORAGE"
+        exec { commandLine adb, 'shell', 'pm', 'grant', mainPackageName, readPermission }
+        exec { commandLine adb, 'shell', 'pm', 'grant', mainPackageName, writePermission }
+    }
 }
 
+
+// ==================================================================
+// Utility methods
+// ==================================================================
+
+/**
+ * Utility method to get the full ADB path
+ * @return the absolute ADB path
+ */
+String getAdbPath() {
+    def adb = android.getAdbExecutable().toString()
+    if (adb.isEmpty()) {
+        throw new GradleException("Could not detect adb path")
+    }
+    return adb
+}
+
+/**
+ * Sometime adb returns '\r' character multiple times.
+ * @param s the original string returned by adb
+ * @return the fixed string without '\r'
+ */
+static def fixAdbOutput(String s) {
+    return s.replaceAll("[\r\n]+", "\n").trim()
+}
+
+/**
+ * Runs the adb tool
+ * @param program the program which is executed on the connected device
+ * @return the output of the adb tool
+ */
+def executeAdb(String program) {
+    def process = new ProcessBuilder(getAdbPath(), "shell", program).redirectErrorStream(true).start()
+    String text = new BufferedReader(new InputStreamReader(process.inputStream)).text
+    return fixAdbOutput(text)
+}
+
+/**
+ * The path which is used to store the Cucumber files.
+ * @return
+ */
+def getCucumberDevicePath() {
+    return 'sdcard/Android/data/org.jay.example/files/reports'
+}
+
+/**
+ * @return the known Cucumber report files/directories
+ */
+static def getCucumberReportFileNames() {
+    return ['cucumber.xml', 'cucumber.html']
+}
