@@ -47,7 +47,5 @@ open class CucumberTestRunner : CucumberAndroidJUnitRunner() {
         super.onCreate(bundle)
     }
 
-
-
 }
 

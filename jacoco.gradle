@@ -1,44 +1,122 @@
+// 应用插件
 apply plugin: 'jacoco'
 
+jacoco { toolVersion = "${jacoco_version}" }
 
-android.buildTypes.debug {
-    testCoverageEnabled true
+android.buildTypes {
+
+    debug {
+        // 开启测试覆盖率统计
+        testCoverageEnabled true
+    }
+
 }
 
-//Enable the coverage report for unit test
-android.testOptions {
-    unitTests.all {
-        jacoco {
-            includeNoLocationClasses = true
+tasks.withType(Test) {
+    // 如果有用到 Robolectric 的测试就要设置该配置
+    jacoco.includeNoLocationClasses = true
+}
+
+// 不需要统计覆盖率的类
+def fileFilter = [
+        '**/R.class',
+        '**/R$*.class',
+        '**/BuildConfig.*',
+        '**/Manifest*.*',
+        '**/*Test*.*',
+        '**/*Model.*',
+        '**/*Bean.*',
+        '**/*Steps.*',
+        '**/*Spec.*',
+        '**/*Event.*'
+]
+
+project.afterEvaluate {
+
+    // 获取混合 productFlavor 对应的构建变量
+    (android.hasProperty('applicationVariants')
+            ? android.'applicationVariants'
+            : android.'libraryVariants').all { variant ->
+        def variantName = variant.name
+
+        println(variantName)
+
+        def unitTestTask = "test${variantName.capitalize()}UnitTest"
+        def uiTestCoverageTask = "create${variantName.capitalize()}CoverageReport"
+
+        // 用于演示多模块统计
+        def secondModule = "mylibrary"
+
+        // 创建不同构建变量的覆盖率统计任务
+        tasks.create(
+                name: "jacoco${variantName.capitalize()}Coverage",
+                type: JacocoReport,
+                dependsOn: [
+                        "$unitTestTask",
+                        "$uiTestCoverageTask",
+                        ":${secondModule}:testDebugUnitTest",
+                ]) {
+
+            group = "Reporting"
+            description = "Generate Jacoco coverage reports for the ${variantName.capitalize()} build"
+
+            reports {
+                html.enabled = true
+                xml.enabled = true
+                csv.enabled = false
+            }
+
+            // 需要统计的字节码目录
+            classDirectories.setFrom(files([
+                    fileTree(
+                            dir: "${buildDir}/tmp/kotlin-classes/${variantName}",
+                            excludes: fileFilter),
+                    fileTree(dir: "${buildDir}/intermediates/javac/${variantName}",
+                            excludes: fileFilter),
+
+                    fileTree(
+                            dir: "$project.rootDir/${secondModule}/build/tmp/kotlin-classes/debug",
+                            excludes: fileFilter),
+                    fileTree(dir: "$project.rootDir/${secondModule}/build/intermediates/javac/debug",
+                            excludes: fileFilter),
+
+            ]))
+
+            // 需要统计的源码目录
+            def coverageSourceDirs = [
+                    "$project.rootDir/app/src/main/java",
+                    "$project.projectDir/src/${variantName}/java",
+                    "$project.rootDir/${secondModule}/src/main/java",
+            ]
+
+            additionalSourceDirs.setFrom(files(coverageSourceDirs))
+            sourceDirectories.setFrom(files(coverageSourceDirs))
+
+            // UI 测试执行数据
+            def uiTestsData = fileTree(
+                    dir: "$project.rootDir/app/build/outputs/code_coverage/${variantName}AndroidTest/connected/",
+                    includes: ["**/*.ec"])
+
+            // 测试执行数据
+            executionData(files([
+                    "$project.buildDir/jacoco/${unitTestTask}.exec",
+                    uiTestsData
+            ]))
+
         }
+
+        // 打开测试覆盖率报告
+        tasks.create(
+                name: "get${variantName.capitalize()}Coverage",
+                type: Exec,
+                dependsOn: "jacoco${variantName.capitalize()}Coverage") {
+            group = "Reporting"
+            commandLine "open",
+                    "$project.rootDir/app/build/reports/jacoco/jacoco${variantName.capitalize()}Coverage/html/index.html"
+        }
+
+
     }
+
 }
 
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest',
-                                                      'createDebugCoverageReport']) {
-
-    reports {
-        xml.enabled = true
-        html.enabled = true
-    }
-
-    def fileFilter = [ '**/R.class',
-                       '**/R$*.class',
-                       '**/BuildConfig.*',
-                       '**/Manifest*.*',
-                       '**/*Test*.*',
-                       '**/*Activity.*',
-                       'android/**/*.*' ]
-
-    def javaDebugTree = fileTree(dir: "$project.buildDir/intermediates/classes/debug",
-            excludes: fileFilter)
-    def kotlinDebugTree = fileTree(dir: "$project.buildDir/tmp/kotlin-classes/debug",
-            excludes: fileFilter)
-    def mainSrc = "$project.projectDir/src/main/java"
-
-    sourceDirectories = files([mainSrc])
-    classDirectories = files([javaDebugTree, kotlinDebugTree])
-    executionData = fileTree(dir: project.buildDir, includes: [
-            'jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec'
-    ])
-}
